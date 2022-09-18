@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProEvento.API.Models;
+using ProEvento.API.Data;
+using ProEvento.API.Data.Migrations;
 
 namespace ProEvento.API.Controllers
 {
@@ -12,53 +14,27 @@ namespace ProEvento.API.Controllers
     [Route("api/[controller]")]
     public class EventoController : ControllerBase
     {
-        public EventoController() 
-        { 
-            
-        }
-        public IEnumerable<Evento> evento = new Evento[]
+        private readonly DataContext dataContext;
+        public EventoController(DataContext context) 
         {
-            new Evento()
-             {
-                EventoId = 1,
-                Tema = "Angular + .NET 5",
-                Local = "Alagoinhas - BAHIA",
-                Lote = "Primeiro Lote",
-                QuantidadePessoas = 100,
-                DataEvento = DateTime.Now.AddDays(2).ToString(),
-                ImagemURL = "foto.png"
-             },
-            new Evento()
-             {
-                EventoId = 2,
-                Tema = "React + .NET 5",
-                Local = "Alagoinhas - BAHIA",
-                Lote = "Segundo Lote",
-                QuantidadePessoas = 200,
-                DataEvento = DateTime.Now.AddDays(3).ToString(),
-                ImagemURL = "foto.png"
-             }
-        };
+            dataContext = context;
+        }
 
         [HttpGet]
         public IEnumerable<Evento> Get()
         {
-            return evento;
+            return dataContext.Eventos;
         }
         [HttpPost]
         public string Post()
         {
             return "Exemplo Post";
-        }
+        } 
         [HttpGet("{id}")]
         public IEnumerable<Evento> GetById(int id)
         {
-            return evento.Where(e => e.EventoId == id);
+            return dataContext.Eventos.Where(e => e.EventoId == id);
         }
-        [HttpGet("{id}")]
-        public IEnumerable<Evento> GetByDiferenceId(int id)
-        {
-            return evento.Where(e => e.EventoId != id);
-        }
+        
     }
 }
