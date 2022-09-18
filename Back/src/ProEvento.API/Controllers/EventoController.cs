@@ -35,6 +35,6 @@ namespace ProEvento.API.Controllers
         {
             return dataContext.Eventos.Where(e => e.EventoId == id);
         }
-        
+        public int teste { get; set; }
     }
 }
