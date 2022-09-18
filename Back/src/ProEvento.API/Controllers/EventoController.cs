@@ -55,5 +55,10 @@ namespace ProEvento.API.Controllers
         {
             return evento.Where(e => e.EventoId == id);
         }
+        [HttpGet("{id}")]
+        public IEnumerable<Evento> GetByDiferenceId(int id)
+        {
+            return evento.Where(e => e.EventoId != id);
+        }
     }
 }
