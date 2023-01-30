@@ -28,7 +28,7 @@ namespace ProEvento.API.Controllers
         [HttpPost]
         public string Post()
         {
-            return "Exemplo Post";
+            return "POST";
         } 
         [HttpGet("{id}")]
         public IEnumerable<Evento> GetById(int id)
