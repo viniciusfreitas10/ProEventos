@@ -3,13 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEventos.Application", "ProEventos.Application\ProEventos.Application.csproj", "{1BE21EB5-2BA4-4367-A6FB-75C2FE5147AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEventos.Application", "ProEventos.Application\ProEventos.Application.csproj", "{1BE21EB5-2BA4-4367-A6FB-75C2FE5147AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEventos.Domain", "ProEventos.Domain\ProEventos.Domain.csproj", "{7C4D971D-EBEF-40BC-8340-623C52404428}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEventos.Domain", "ProEventos.Domain\ProEventos.Domain.csproj", "{7C4D971D-EBEF-40BC-8340-623C52404428}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEvento.API", "ProEvento.API\ProEvento.API.csproj", "{47B13B9C-A0D4-4AD7-9DB6-B94F75E81578}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEvento.API", "ProEvento.API\ProEvento.API.csproj", "{47B13B9C-A0D4-4AD7-9DB6-B94F75E81578}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7C4D971D-EBEF-40BC-8340-623C52404428} = {7C4D971D-EBEF-40BC-8340-623C52404428}
+		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813} = {CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}
+	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEventos.Persistence", "ProEventos.Persistence\ProEventos.Persistence.csproj", "{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEventos.Persistence", "ProEventos.Persistence\ProEventos.Persistence.csproj", "{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,9 +23,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{1BE21EB5-2BA4-4367-A6FB-75C2FE5147AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -72,5 +73,11 @@ Global
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x64.Build.0 = Release|Any CPU
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x86.ActiveCfg = Release|Any CPU
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {531DC730-DEA5-4D49-9CED-24CEA5665210}
 	EndGlobalSection
 EndGlobal

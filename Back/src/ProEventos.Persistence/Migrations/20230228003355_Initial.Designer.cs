@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ProEvento.Persistence;
+using ProEvento.Persistence.Context;
 
 namespace ProEventos.Persistence.Migrations
 {
