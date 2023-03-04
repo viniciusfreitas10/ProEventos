@@ -61,7 +61,7 @@ namespace ProEvento.API.Controllers
                     $"Erro ao tentar adicionar eventos. Erro: {e.Message}");
             }
         }
-        [HttpPut("{id}/idAt")]
+        [HttpPut("{id}")]
         public async Task<IActionResult> AttEvent(int id, Evento model)
         {
             try
@@ -79,7 +79,7 @@ namespace ProEvento.API.Controllers
                     $"Erro ao tentar atualizar eventos. Erro: {e.Message}");
             }
         }
-        [HttpDelete("{id}/id")]
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteEvent(int id, Evento model)
         {
             try
@@ -95,7 +95,7 @@ namespace ProEvento.API.Controllers
                     $"Erro ao tentar deletar o evento. Erro: {e.Message}");
             }
         }
-        [HttpGet("{id}/id")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
             try
