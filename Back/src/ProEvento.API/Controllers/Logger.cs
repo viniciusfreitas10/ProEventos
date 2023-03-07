@@ -14,40 +14,41 @@ namespace ProEvento.API.Controllers
 
         public Logger()
         {}
-
-        public string CreatFile(string type)
+        public void Log(string metodo, string mensagem, string type)
         {
-            _file = @"C:\Users\vfreitas\source\repos\PROEVENTOS\Back\src\ProEvento.API\Log\" + $"log_{type}_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".txt";
-            return _file;
-        } 
+            StreamWriter file = CreatStramWriter(type);
+
+            file.WriteLine(DateTime.Now + $" {type} : {metodo} > {mensagem}");
+            file.WriteLine("-------------------------------");
+            file.Dispose();
+        }
         public StreamWriter CreatStramWriter(string type)
         {
-            string FileLog = CreatFile(type);
+            string FileLog = CreatFileTxt(type);
 
-            if (!Directory.Exists(Path.GetDirectoryName(FileLog)))
-                Directory.CreateDirectory(Path.GetDirectoryName(FileLog));
+            CreatVerifyFile(VerifyExistsFile(FileLog), FileLog);
 
             StreamWriter file = new StreamWriter(FileLog, true, Encoding.UTF8);
 
             return file;
         }
-
-        public void LogError(string metodo, string erro)
+        public string CreatFileTxt(string type)
         {
-            StreamWriter file = CreatStramWriter("error");
-
-            file.WriteLine(DateTime.Now + $"Erro: {metodo} > {erro}");
-            file.WriteLine("-------------------------------");
-            file.Dispose();
+            _file = @"C:\Users\vfreitas\source\repos\PROEVENTOS\Back\src\ProEvento.API\Log\" + $"log_{type}_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+            
+            return _file;
         }
-
-        public void LogInfo(string metodo, string mensagemInfo)
+        public bool VerifyExistsFile(string file)
         {
-            StreamWriter file = CreatStramWriter("info");
-
-            file.WriteLine(DateTime.Now + $"Info: {metodo} > {mensagemInfo}");
-            file.WriteLine("-------------------------------");
-            file.Dispose();
+           return Directory.Exists(Path.GetDirectoryName(file)) ? true : false;
         }
+        public void CreatVerifyFile(bool exists, string file)
+        {
+            if (!exists)
+                Directory.CreateDirectory(Path.GetDirectoryName(file));
+        }
+       
+
+       
     }
 }

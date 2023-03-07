@@ -29,7 +29,7 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("GetEvents", "Recuperando eventos no GetEvents");
+                logger.Log("GetEvents", "Recuperando eventos no GetEvents", "Info");
 
                 var eventos = await _eventoService.GetAllEventosAsync(true);
                 if (eventos == null) return NotFound("Nenhum evento encontrado");
@@ -38,7 +38,7 @@ namespace ProEvento.API.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError("GetEvents", e.Message);
+                logger.Log("GetEvents", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar recuperar eventos. Erro: {e.Message}" );
             }
@@ -48,7 +48,7 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("AddEvent", $"adicionando evento: ID: {model.Id}");
+                logger.Log("AddEvent", $"adicionando evento: ID: {model.Id}", "Info");
 
                 var evento = await _eventoService.AddEventos(model);
                 if (evento == null) return BadRequest($"Erro ao atualizar o evento: {evento.Id}");
@@ -56,7 +56,7 @@ namespace ProEvento.API.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError("AddEvent", e.Message);
+                logger.Log("AddEvent", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status400BadRequest,
                     $"Erro ao tentar adicionar eventos. Erro: {e.Message}");
             }
@@ -66,15 +66,19 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("AttEvent", $"atualizando evento: ID: {model.Id}");
+                logger.Log("AttEvent", $"atualizando evento: ID: {model.Id}", "Info");
 
                 var evento = await _eventoService.UpdateEvento(id,model);
-                if (evento == null) return BadRequest($"Erro ao atualizar o evento: {evento.Id}");
-                return Ok(evento);
+                if (evento == null)
+                {
+                    return BadRequest($"Erro ao atualizar o evento: {evento.Id}");
+                    logger.Log("AttEvent", $"Erro ao atualizar o evento: {evento.Id}", "Error");
+                }
+                    return Ok(evento);
             }
             catch (Exception e)
             {
-                logger.LogError("AttEvent", e.Message);
+                logger.Log("AttEvent", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status400BadRequest,
                     $"Erro ao tentar atualizar eventos. Erro: {e.Message}");
             }
@@ -84,13 +88,13 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("DeleteEvent", $"atualizando evento: ID: {model.Id}");
+                logger.Log("DeleteEvent", $"atualizando evento: ID: {model.Id}", "Info");
 
                 return await _eventoService.DeleteEvento(id) ?  Ok("Deletado") :  BadRequest($"Erro ao deletar o evento: {id}");
             }
             catch (Exception e)
             {
-                logger.LogError("DeleteEvent", e.Message);
+                logger.Log("DeleteEvent", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar deletar o evento. Erro: {e.Message}");
             }
@@ -100,14 +104,14 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("GetById", $"Recuperando eventos com o id: {id}");
+                logger.Log("GetById", $"Recuperando eventos com o id: {id}", "Info");
                 var evento = await _eventoService.GetEventoById(id, true);
                 if (evento == null) return NotFound("Nenhum evento encontrado com esse Id");
                 return Ok(evento);
             }
             catch (Exception e)
             {
-                logger.LogError("GetById", e.Message);
+                logger.Log("GetById", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar recuperar evento com Id: {id} - Erro: {e.Message}");
             }
@@ -118,7 +122,7 @@ namespace ProEvento.API.Controllers
         {
             try
             {
-                logger.LogInfo("GetByTema", $"Recuperando eventos com o tema: {tema}");
+                logger.Log("GetByTema", $"Recuperando eventos com o tema: {tema}", "Info");
 
                 var evento = await _eventoService.GetAllEventosByTemaAsync(tema, true);
                 if (evento == null) return NotFound("Nenhum evento encontrado com esse tema");
@@ -126,7 +130,7 @@ namespace ProEvento.API.Controllers
             }
             catch (Exception e)
             {
-                logger.LogError("GetByTema", e.Message);
+                logger.Log("GetByTema", e.Message, "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar recuperar evento com o tema: {tema} - Erro: {e.Message}");
             }
