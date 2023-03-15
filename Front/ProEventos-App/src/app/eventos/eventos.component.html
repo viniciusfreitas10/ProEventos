@@ -1,3 +1,4 @@
+<script src="https://kit.fontawesome.com/f7a8512136.js" crossorigin="anonymous"></script>
 <hr>
 <div method="" class="form-inline">
     <div class="form-group mb-2">
@@ -10,6 +11,7 @@
         <tr>
             <th>
                 <button type="button" class="btn btn-dark text-light" (click)="controleDeExibicaoDeImagem()" aria-controls="imagens">
+                <i class="{{ExibirImagem ? 'fa fa-slash' : 'fa fa-eye'}}"></i>
                 {{ExibirImagem ? "Ocultar" : "Exibir"}}
               </button>
             </th>
@@ -27,15 +29,19 @@
             <td>
                 <img [collapse]="!ExibirImagem" [isAnimated]="true" src="/assets/{{evento.imagemURL}}" [style.width.px]="ImageWidth" [style.margin.px]="ImageMargin"><img>
             </td>
-            <td>{{evento.eventoId}}</td>
+            <td>{{evento.id}}</td>
             <td>{{evento.tema}}</td>
             <td>{{evento.local}}</td>
-            <td>{{evento.dataEvento}}</td>
+            <td>{{evento.dataEvento | DateTimeFormatPip}}</td>
             <td>{{evento.quantidadePessoas}}</td>
-            <td>{{evento.lote}}</td>
+            <td>{{evento.lotes[0].nome}}</td>
             <td>
-                <button type="button" class="btn btn-primary btn-sm mr-2">Editar</button>
-                <button type="button" class="btn btn-danger btn-sm mr-2">Excluir</button>
+                <button type="button" class="btn btn-primary btn-sm mr-2">
+                 <i class="fa fa-edit"></i> Editar
+                </button>
+                <button type="button" class="btn btn-danger btn-sm mr-2">
+                <i class="fa fa-trash"></i>  Excluir
+                </button>
             </td>
         </tr>
     </tbody>
