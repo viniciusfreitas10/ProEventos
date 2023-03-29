@@ -1,4 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
+
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
+
 import { Evento } from '../models/Evento';
 import { EventoService } from '../services/Evento.service';
 
@@ -8,19 +13,25 @@ import { EventoService } from '../services/Evento.service';
   styleUrls: ['./eventos.component.scss']
 })
 export class EventosComponent implements OnInit {
-
+  modalRef?: BsModalRef;
   public eventos: Evento[] = [];
   public eventosFiltrado:Evento[] = [];
   public ImageWidth:number = 100;
   public ImageMargin: number = 10;
+  public message:string = "";
   isCollapsed = true;
   ExibirImagem: boolean = true;
   private _filtroListaPaginaInicial: string = '';
 
-  constructor(private eventoService: EventoService) { }
+  constructor(private eventoService: EventoService,
+    private modalService: BsModalService,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService
+    ) { }
 
   ngOnInit(): void {
-    this.getEventos()
+    this.spinner.show();
+    this.getEventos();
   }
   public get filtroListaPaginaInicial(): string{
     return this._filtroListaPaginaInicial;
@@ -42,14 +53,29 @@ export class EventosComponent implements OnInit {
   }
 
   public getEventos(): void{
-    this.eventoService.getEventos().subscribe(
-    (_eventos:Evento[])  => {
+    this.eventoService.getEventos().subscribe({
+     next: (_eventos:Evento[])  => {
         this.eventos = _eventos,
         this.eventosFiltrado = this.eventos
         console.log(_eventos)
       },
-      error => console.log(error),
-    );
+      error: (error: any) => {
+        this.spinner.hide();
+        this.toastr.error('Erro ao carregar os eventos', 'Erro!')
+      },
+      complete: () => this.spinner.hide(),
+    });
+  }
+  openModal(template: TemplateRef<any>): void{
+    this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
+  confirm(): void {
+    this.modalRef?.hide();
+    this.toastr.success('O Evento foi deletado com sucesso','Deletado!');
+  }
+
+  decline(): void {
+    this.modalRef?.hide();
+  }
 }
