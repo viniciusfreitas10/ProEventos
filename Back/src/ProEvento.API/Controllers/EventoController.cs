@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using ProEvento.Persistence;
 using ProEvento.Domain;
-using ProEvento.Persistence.Context;
 using ProEventos.Application.Contratos;
 using Microsoft.AspNetCore.Http;
+using ProEvento.Application.Dtos;
 
 namespace ProEvento.API.Controllers
 {
@@ -32,7 +28,7 @@ namespace ProEvento.API.Controllers
                 logger.Log("GetEvents", "Recuperando eventos no GetEvents", "Info");
 
                 var eventos = await _eventoService.GetAllEventosAsync(true);
-                if (eventos == null) return NotFound("Nenhum evento encontrado");
+                if (eventos == null) return NoContent();
 
                 return Ok(eventos);
             }
@@ -44,14 +40,14 @@ namespace ProEvento.API.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> AddEvent(Evento model)
+        public async Task<IActionResult> AddEvent(EventoDto model)
         {
             try
             {
                 logger.Log("AddEvent", $"adicionando evento: ID: {model.Id}", "Info");
 
                 var evento = await _eventoService.AddEventos(model);
-                if (evento == null) return BadRequest($"Erro ao atualizar o evento: {evento.Id}");
+                if (evento == null) return NoContent();
                 return Ok(evento);
             }
             catch (Exception e)
@@ -62,7 +58,7 @@ namespace ProEvento.API.Controllers
             }
         }
         [HttpPut("{id}")]
-        public async Task<IActionResult> AttEvent(int id, Evento model)
+        public async Task<IActionResult> AttEvent(int id, EventoDto model)
         {
             try
             {
@@ -71,7 +67,7 @@ namespace ProEvento.API.Controllers
                 var evento = await _eventoService.UpdateEvento(id,model);
                 if (evento == null)
                 {
-                    return BadRequest($"Erro ao atualizar o evento: {evento.Id}");
+                    return NoContent();
                     logger.Log("AttEvent", $"Erro ao atualizar o evento: {evento.Id}", "Error");
                 }
                     return Ok(evento);
@@ -84,13 +80,14 @@ namespace ProEvento.API.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(int id, Evento model)
+        public async Task<IActionResult> DeleteEvent(int id, EventoDto model)
         {
             try
             {
                 logger.Log("DeleteEvent", $"atualizando evento: ID: {model.Id}", "Info");
 
-                return await _eventoService.DeleteEvento(id) ?  Ok("Deletado") :  BadRequest($"Erro ao deletar o evento: {id}");
+                return await _eventoService.DeleteEvento(id) ?  Ok("Deletado") 
+                    : throw new Exception("Ocorreu um erro específico ao tentar deletar o evento.");
             }
             catch (Exception e)
             {
@@ -106,7 +103,7 @@ namespace ProEvento.API.Controllers
             {
                 logger.Log("GetById", $"Recuperando eventos com o id: {id}", "Info");
                 var evento = await _eventoService.GetEventoById(id, true);
-                if (evento == null) return NotFound("Nenhum evento encontrado com esse Id");
+                if (evento == null) return NoContent();
                 return Ok(evento);
             }
             catch (Exception e)
@@ -125,7 +122,7 @@ namespace ProEvento.API.Controllers
                 logger.Log("GetByTema", $"Recuperando eventos com o tema: {tema}", "Info");
 
                 var evento = await _eventoService.GetAllEventosByTemaAsync(tema, true);
-                if (evento == null) return NotFound("Nenhum evento encontrado com esse tema");
+                if (evento == null) return NoContent();
                 return Ok(evento);
             }
             catch (Exception e)
