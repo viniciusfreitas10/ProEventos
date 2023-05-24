@@ -22,6 +22,7 @@ export class EventoListaComponent implements OnInit {
   isCollapsed = true;
   ExibirImagem: boolean = true;
   private _filtroListaPaginaInicial: string = '';
+  public eventoId: number = 0;
 
   constructor(
     private eventoService: EventoService,
@@ -68,13 +69,32 @@ export class EventoListaComponent implements OnInit {
       complete: () => this.spinner.hide(),
     });
   }
-  openModal(template: TemplateRef<any>): void{
+
+  public DeleteEvent(id: number): any{
+    this.eventoService.DeleteEvento(id).subscribe(
+      (result: any) =>{
+        if(result.message === "Deletado"){
+          this.toastr.success(`O Evento de id ${id} foi deletado com sucesso`,'Deletado!');
+          this.getEventos();
+        };
+      },
+      (error: any) => {
+        console.log(error);
+        this.toastr.error(`Erro ao excluir o evento de id ${id}!`, "Erro!");
+      }
+    ).add( () => this.spinner.hide());
+  }
+
+  openModal(event: any,template: TemplateRef<any>, _eventoId: number): void{
+    this.eventoId = _eventoId;
+    event.stopPropagation();
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   confirm(): void {
-    this.modalRef?.hide();
-    this.toastr.success('O Evento foi deletado com sucesso','Deletado!');
+    this.modalRef.hide();
+    this.spinner.show();
+    this.DeleteEvent(this.eventoId);
   }
 
   decline(): void {

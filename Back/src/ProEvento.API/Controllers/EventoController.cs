@@ -80,13 +80,13 @@ namespace ProEvento.API.Controllers
             }
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteEvent(int id, EventoDto model)
+        public async Task<IActionResult> DeleteEvent(int id)
         {
             try
             {
-                logger.Log("DeleteEvent", $"atualizando evento: ID: {model.Id}", "Info");
+                logger.Log("DeleteEvent", $"atualizando evento: ID: {id}", "Info");
 
-                return await _eventoService.DeleteEvento(id) ?  Ok("Deletado") 
+                return await _eventoService.DeleteEvento(id) ?  Ok(new {message = "Deletado"}) 
                     : throw new Exception("Ocorreu um erro específico ao tentar deletar o evento.");
             }
             catch (Exception e)

@@ -46,12 +46,12 @@
                 <td class="d-none d-md-table-cell">{{evento.local}}</td>
                 <td>{{evento.dataEvento | DateTimeFormatPip}}</td>
                 <td class="d-none d-md-table-cell">{{evento.quantidadePessoas}}</td>
-                <td class="d-none d-md-table-cell">{{evento.lotes[0].nome}}</td>
+                <td class="d-none d-md-table-cell">{{evento.lotes[0]?.nome | uppercase}}</td>
                 <td>
                     <!--   <button type="button" class="btn btn-primary btn-sm mr-2" tooltip="Editar">
                <i class="fa fa-edit"></i> Editar
               </button>-->
-                    <button type="button" class="btn btn-danger btn-lg mr-2" tooltip="Excluir" (click)="openModal(template)">
+                    <button type="button" class="btn btn-danger btn-lg mr-2" tooltip="Excluir" (click)="openModal($event,template, evento.id)">
               <i class="fa fa-trash"></i>
               </button>
                 </td>
@@ -71,7 +71,7 @@
 
 <ng-template #template>
     <div class="modal-body text-center">
-        <p>Tem certeza que quer deletar esse evento?</p>
+        <p>Tem certeza que quer deletar o evento de código {{this.eventoId}}?</p>
         <button type="button" class=" btn btn-danger mr-1" (click)="confirm()">Sim</button>
         <button type="button" class=" btn btn-primary ml-1" (click)="decline()">Não</button>
     </div>
