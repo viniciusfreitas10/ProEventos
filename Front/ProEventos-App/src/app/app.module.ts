@@ -35,6 +35,7 @@ import { EventoListaComponent } from './components/eventos/evento-lista/evento-l
 import { UserComponent } from './components/user/user.component';
 import { LoginComponent } from './components/user/login/login.component';
 import { RegistrationComponent } from './components/user/registration/registration.component';
+import { LoteService } from './services/Lote.service';
 //import { title } from 'process';
 
 defineLocale('pt-br', ptBrLocale);
@@ -79,7 +80,7 @@ defineLocale('pt-br', ptBrLocale);
     ),
     NgxSpinnerModule
   ],
-  providers: [EventoService],
+  providers: [EventoService, LoteService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

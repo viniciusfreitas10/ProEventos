@@ -44,12 +44,10 @@ namespace ProEventos.Application
                     {
                         await UpdateLote(lotes, model,eventoId);
                     }
-
-                    var LoteRetorno = await _lotePersist.GetAllLotesByEventIdAsync(eventoId);
-
-                    return _mapper.Map<LoteDto[]>(LoteRetorno);
                 }
-                return null;
+                var LoteRetorno = await _lotePersist.GetAllLotesByEventIdAsync(eventoId);
+
+                return _mapper.Map<LoteDto[]>(LoteRetorno);
             }
             catch (Exception e)
             {

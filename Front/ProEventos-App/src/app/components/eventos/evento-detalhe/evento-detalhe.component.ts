@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { NgxSpinnerService, Spinner } from 'ngx-spinner';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
+import { Lote } from 'src/app/models/Lote';
 import { EventoService } from 'src/app/services/Evento.service';
 
 @Component({
@@ -21,6 +22,13 @@ export class EventoDetalheComponent implements OnInit {
     get f():any{
       return this.form.controls;
     }
+
+    get modoEditar(): boolean{
+      return this.ModeSave =='put'
+    }
+    get lotes(): FormArray{
+      return this.form.get('lotes') as FormArray
+    }
     get BsConfig():any{
       return {
         isAnimated: true,
@@ -34,10 +42,11 @@ export class EventoDetalheComponent implements OnInit {
 
     constructor(private fb: FormBuilder,
       private localeService: BsLocaleService,
-      private router: ActivatedRoute,
+      private activatedRouter: ActivatedRoute,
       private eventoService: EventoService,
       private spiner: NgxSpinnerService,
-      private toastr: ToastrService
+      private toastr: ToastrService,
+      private router: Router
       ) {
        this.localeService.use('pt-br');
       }
@@ -48,7 +57,7 @@ export class EventoDetalheComponent implements OnInit {
     }
 
     public CarregarEvento(): void{
-      var eventoIdaram = this.router.snapshot.paramMap.get('id');
+      var eventoIdaram = this.activatedRouter.snapshot.paramMap.get('id');
 
       if(eventoIdaram !== null){
         this.ModeSave = 'put';
@@ -84,16 +93,32 @@ export class EventoDetalheComponent implements OnInit {
     ],
     imagemURL: ['', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]],
     telefone: ['', [Validators.required, Validators.maxLength(16), Validators.minLength(11)]],
-    email: ['', [Validators.required, Validators.maxLength(30), Validators.minLength(4), Validators.email]]
+    email: ['', [Validators.required, Validators.maxLength(30), Validators.minLength(4), Validators.email]],
+    lotes: this.fb.array([]),
+  });
   }
-  );
+
+  adicionarLote(): void {
+    this.lotes.push(this.criarLote({ id: 0 } as Lote));
   }
+
+  criarLote(lote: Lote): FormGroup {
+    return this.fb.group({
+      id: [lote.id],
+      nome: [lote.nome, Validators.required],
+      quantidade: [lote.quantidade, Validators.required],
+      preco: [lote.preco, Validators.required],
+      dataInicio: [lote.dataInicio,Validators.required],
+      dataFim: [lote.dataFim,Validators.required],
+    });
+  }
+
 
   public resetForm(): void{
     this.form.reset();
   }
-  public cssValidator(campoForm: FormControl): any{
-    return {'is-invalid': campoForm.errors && campoForm.touched}
+  public cssValidator(campoForm: FormControl  | AbstractControl): any{
+    return {'is-invalid': campoForm?.errors && campoForm?.touched}
   }
 
   public ConfirmAlterationEvent(): void{
@@ -102,8 +127,9 @@ export class EventoDetalheComponent implements OnInit {
       this.evento = (this.ModeSave == 'post') ? {...this.form.value} : {id: this.evento.id, ...this.form.value};
 
       this.eventoService[this.ModeSave](this.evento).subscribe(
-        () => {
-          this.toastr.success("Evento atualizado com sucesso!", "Sucesso!")
+        (eventoRetorno: Evento) => {
+          this.toastr.success("Evento atualizado com sucesso!", "Sucesso!");
+          this.router.navigate([`eventos/detalhe/${eventoRetorno.id}`])
         },
         (error: any) => {
           console.log(error);

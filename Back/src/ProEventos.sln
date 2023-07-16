@@ -15,6 +15,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEvento.API", "ProEvento.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProEventos.Persistence", "ProEventos.Persistence\ProEventos.Persistence.csproj", "{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProEventosTests", "ProEventosTests\ProEventosTests.csproj", "{8EC1828A-3646-4C82-9443-766D90A166C7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,18 @@ Global
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x64.Build.0 = Release|Any CPU
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x86.ActiveCfg = Release|Any CPU
 		{CFF8CC74-74D3-4F21-A8CB-CFDF4D482813}.Release|x86.Build.0 = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|x64.Build.0 = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Debug|x86.Build.0 = Debug|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|x64.ActiveCfg = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|x64.Build.0 = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|x86.ActiveCfg = Release|Any CPU
+		{8EC1828A-3646-4C82-9443-766D90A166C7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
