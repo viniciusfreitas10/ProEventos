@@ -128,6 +128,7 @@
                 <div formArrayName="lotes" *ngFor="let lote of lotes.controls; let i=index">
                     <fieldset [formGroupName]="i" class="form-group">
                         <legend class="d-flex justify-content-between capitalize">
+                            {{returnTituloLote(lotes.get(i+'.nome').value)}}
                             <button (click)="removerLote(template,i)" class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex" tooltip="Excluir Lote" [adaptivePosition]="false" [delay]="500" placement="left">
                 <i class="fa fa-window-close my-1"></i>
                 <b class="ml-1 d-none d-sm-block">Excluir</b>
@@ -144,7 +145,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Preço</label>
-                                <input [ngClass]="cssValidator(lotes.get(i+'.preco'))" type="text" currencyMask class="form-control" formControlName="preco" placeholder="R$ 0,00">
+                                <input [ngClass]="cssValidator(lotes.get(i+'.preco'))" type="text" currencyMask [options]="{ prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left' }" class="form-control" formControlName="preco" placeholder="R$ 0,00">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Data Início</label>
@@ -169,7 +170,7 @@
             <button class="btn btn-outline-secondary mr-auto border">
         Cancelar Alteração
       </button>
-            <button (click)="saveLote()" class="btn btn-success">
+            <button [disabled]="!form.controls.lotes.valid" (click)="saveLote()" class="btn btn-success">
         Salvar Lotes
       </button>
         </div>

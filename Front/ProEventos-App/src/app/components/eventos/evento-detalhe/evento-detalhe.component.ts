@@ -79,7 +79,7 @@ export class EventoDetalheComponent implements OnInit {
     public CarregarEvento(): void{
       this.eventoId = +this.activatedRouter.snapshot.paramMap.get('id');
 
-      if(this.eventoId !== null || this.eventoId === 0){
+      if(this.eventoId !== null && this.eventoId != 0){
         this.ModeSave = 'put';
 
         this.eventoService.getEventoById(this.eventoId ).subscribe(
@@ -172,8 +172,8 @@ export class EventoDetalheComponent implements OnInit {
   }
 
   public saveLote(): void{
-    this.spiner.show();
     if(this.form.controls.lotes.valid){
+      this.spiner.show();
       this.loteservice.SaveLote(this.eventoId, this.form.value.lotes)
       .subscribe(
         () => {
@@ -220,4 +220,7 @@ export class EventoDetalheComponent implements OnInit {
     this.modalRef.hide();
   };
 
+  public returnTituloLote(nome: string): string{
+    return nome === null || nome === '' ? 'Nome do Lote' : nome
+  }
 }

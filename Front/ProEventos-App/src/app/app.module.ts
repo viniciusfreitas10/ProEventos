@@ -19,6 +19,7 @@ import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import  {  NgxSpinnerModule  }  from  'ngx-spinner' ;
+import { NgxCurrencyModule } from "ngx-currency";
 
 import { defineLocale } from 'ngx-bootstrap/chronos';
 import { ptBrLocale } from 'ngx-bootstrap/locale';
@@ -78,7 +79,8 @@ defineLocale('pt-br', ptBrLocale);
         progressAnimation: "increasing"
       }
     ),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgxCurrencyModule
   ],
   providers: [EventoService, LoteService],
   bootstrap: [AppComponent]
