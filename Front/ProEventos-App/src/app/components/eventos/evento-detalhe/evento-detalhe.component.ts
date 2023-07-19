@@ -57,6 +57,9 @@ export class EventoDetalheComponent implements OnInit {
       };
     }
 
+    get optionsFinanc():any{
+      return { prefix: 'R$ ', thousands: '.', decimal: ',', align: 'left' };
+    }
 
     constructor(private fb: FormBuilder,
       private localeService: BsLocaleService,
