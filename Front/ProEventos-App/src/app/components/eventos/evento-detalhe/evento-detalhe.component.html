@@ -101,7 +101,7 @@
                 <button class="btn btn-outline-secondary mr-auto border " (click)="resetForm() ">
           Cancelar Alteração
         </button>
-                <button class="btn btn-success " (click)="ConfirmAlterationEvent()" [disabled]="!form.valid ">
+                <button class="btn btn-success " (click)="saveEvent()" [disabled]="!form.valid ">
           <span class="mr-1 "></span> <!--spinner-border spinner-border-sm-->
           Salvar Evento
         </button>
@@ -111,6 +111,8 @@
 </div>
 
 <div class="card rounded shadow-sm mt-4" *ngIf="modoEditar">
+    <!--<p>form value: {{form.controls.lotes.value | json}}</p>
+    <p>form valid: {{form.controls.lotes.status | json}}</p> -->
     <div class="p-3">
         <div class="d-flex border-bottom">
             <h2 class="mr-auto">
@@ -126,7 +128,7 @@
                 <div formArrayName="lotes" *ngFor="let lote of lotes.controls; let i=index">
                     <fieldset [formGroupName]="i" class="form-group">
                         <legend class="d-flex justify-content-between capitalize">
-                            <button class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex" tooltip="Excluir Lote" [adaptivePosition]="false" [delay]="500" placement="left">
+                            <button (click)="removerLote(template,i)" class="p-2 btn btn-sm btn-outline-warning mb-1 d-flex" tooltip="Excluir Lote" [adaptivePosition]="false" [delay]="500" placement="left">
                 <i class="fa fa-window-close my-1"></i>
                 <b class="ml-1 d-none d-sm-block">Excluir</b>
               </button>
@@ -146,11 +148,11 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Data Início</label>
-                                <input [ngClass]="cssValidator(lotes.get(i+'.dataInicio'))" type="text" class="form-control" formControlName="dataInicio" placeholder="01/01/2019">
+                                <input bsDatepicker [bsConfig]="BsConfigLote" [ngClass]="cssValidator(lotes.get(i+'.dataInicio'))" type="text" class="form-control" formControlName="dataInicio" placeholder="01/01/2019">
                             </div>
                             <div class="form-group col-md-4">
                                 <label>Data Fim</label>
-                                <input [ngClass]="cssValidator(lotes.get(i+'.dataFim'))" type="text" class="form-control" formControlName="dataFim" placeholder="01/01/2019">
+                                <input bsDatepicker [bsConfig]="BsConfigLote" [ngClass]="cssValidator(lotes.get(i+'.dataFim'))" type="text" class="form-control" formControlName="dataFim" placeholder="01/01/2019">
                             </div>
                         </div>
                     </fieldset>
@@ -167,10 +169,18 @@
             <button class="btn btn-outline-secondary mr-auto border">
         Cancelar Alteração
       </button>
-            <button class="btn btn-success">
+            <button (click)="saveLote()" class="btn btn-success">
         Salvar Lotes
       </button>
         </div>
     </div>
 </div>
 <hr>
+
+<ng-template #template>
+    <div class="modal-body text-center">
+        <p>Tem certeza que quer deletar o lote {{this.loteAtual.nome}}?</p>
+        <button type="button" class=" btn btn-danger mr-1" (click)="confirmarDeleteLote()">Sim</button>
+        <button type="button" class=" btn btn-primary ml-1" (click)="declineDeleteLote()">Não</button>
+    </div>
+</ng-template>
