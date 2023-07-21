@@ -11,6 +11,7 @@ import { Evento } from 'src/app/models/Evento';
 import { Lote } from 'src/app/models/Lote';
 import { EventoService } from 'src/app/services/Evento.service';
 import { LoteService } from 'src/app/services/Lote.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-evento-detalhe',
@@ -25,6 +26,8 @@ export class EventoDetalheComponent implements OnInit {
     evento = {} as Evento;
     ModeSave?: string = 'post';
     loteAtual = {id: 0, nome: "", indice: 0};
+    imagemURL = `/assets/upload.png`;
+    file: File;
 
     get f():any{
       return this.form.controls;
@@ -89,6 +92,9 @@ export class EventoDetalheComponent implements OnInit {
           (evento: Evento) => {
             this.evento = {...evento};
             this.form.patchValue(this.evento);
+            if(this.evento.imagemURL !== ''){
+              this.imagemURL = environment.apiURL + 'resources/images/' + this.evento.imagemURL;
+             }
             this.CarregarLotes(this.evento.lotes);
           },
           (error: any) => {
@@ -124,9 +130,9 @@ export class EventoDetalheComponent implements OnInit {
       quantidadePessoas: ['',
       [Validators.required, Validators.max(120000), Validators.min(10)]
     ],
-    imagemURL: ['', [Validators.required, Validators.maxLength(30), Validators.minLength(3)]],
+    imagemURL: [''],
     telefone: ['', [Validators.required, Validators.maxLength(16), Validators.minLength(11)]],
-    email: ['', [Validators.required, Validators.maxLength(30), Validators.minLength(4), Validators.email]],
+    email: ['', [Validators.required, Validators.email]],
     lotes: this.fb.array([]),
   });
   }
@@ -225,5 +231,30 @@ export class EventoDetalheComponent implements OnInit {
 
   public returnTituloLote(nome: string): string{
     return nome === null || nome === '' ? 'Nome do Lote' : nome
+  }
+
+  public onFileChanges(ev: any): void{
+    const reader = new FileReader();
+
+    reader.onload = (event: any) => this.imagemURL = event.target.result;
+
+    this.file = ev.target.files;
+    reader.readAsDataURL(this.file[0]);
+    this.uploadImage();
+  }
+
+  public uploadImage():void{
+    this.spiner.show();
+    this.eventoService.postUpload(this.eventoId, this.file)
+      .subscribe(
+        () => {
+          this.CarregarEvento();
+          this.toastr.success("Imagem atualizada com sucesso", "Sucesso!")
+        },
+        (error: any) => {
+          this.toastr.error("Erro ao atualizar a imagem", "Erro!")
+          console.error(error);
+        }
+      ).add(() => this.spiner.hide())
   }
 }

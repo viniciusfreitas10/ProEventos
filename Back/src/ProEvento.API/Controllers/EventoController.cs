@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using ProEvento.Domain;
 using ProEventos.Application.Contratos;
 using Microsoft.AspNetCore.Http;
 using ProEvento.Application.Dtos;
+using Microsoft.AspNetCore.Hosting;
+using ProEvento.API.services;
 
 namespace ProEvento.API.Controllers
 {
@@ -13,11 +14,16 @@ namespace ProEvento.API.Controllers
     public class EventoController : ControllerBase
     {
         private readonly IEventoService _eventoService;
-        Logger logger = new Logger();
+        private readonly IWebHostEnvironment _hostEnvironment;
 
-        public EventoController(IEventoService eventoService) 
+        Logger logger = new Logger();
+        Services services = new Services();
+
+        public EventoController(IEventoService eventoService,
+            IWebHostEnvironment hostEnvironment) 
         {
             _eventoService = eventoService;
+            _hostEnvironment = hostEnvironment;
         }
 
         [HttpGet]
@@ -57,6 +63,39 @@ namespace ProEvento.API.Controllers
                     $"Erro ao tentar adicionar eventos. Erro: {e.Message}");
             }
         }
+
+        [HttpPost("upload-image/{eventoId}")]
+        public async Task<IActionResult> UploadImage(int eventoId)
+        {
+            try
+            {
+                logger.Log("UploadImage", "Realizando o uploade de imagem", "Info");
+
+                var evento = await _eventoService.GetEventoById(eventoId, false);
+
+                if (evento == null) return NoContent(); //ToDo: Refatorar e criar método para verificação se o evento existe e chamar nos controller que hoje são repetidos essa verificação
+
+                var file = Request.Form.Files[0];
+
+                if(file.Length > 0)
+                {
+                    services.DeleteImage(evento.ImagemURL, _hostEnvironment);
+                    evento.ImagemURL = await services.SaveImage(file, _hostEnvironment);
+                };
+
+                var EventoRetorno = await _eventoService.UpdateEvento(eventoId, evento);
+
+                return Ok(EventoRetorno);
+
+            }
+            catch(Exception e)
+            {
+                logger.Log("UploadImage", e.StackTrace, "Error");
+                return this.StatusCode(StatusCodes.Status400BadRequest,
+                    $"Erro ao realizar o upload da imagem do evento: {eventoId}. Erro: {e.Message}");
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> AttEvent(int id, EventoDto model)
         {
@@ -86,8 +125,19 @@ namespace ProEvento.API.Controllers
             {
                 logger.Log("DeleteEvent", $"atualizando evento: ID: {id}", "Info");
 
-                return await _eventoService.DeleteEvento(id) ?  Ok(new {message = "Deletado"}) 
-                    : throw new Exception("Ocorreu um erro específico ao tentar deletar o evento.");
+                var evento = await _eventoService.GetEventoById(id, false);
+
+                if (evento == null) return NoContent(); //ToDo: Refatorar e criar método para verificação se o evento existe e chamar nos controller que hoje são repetidos essa verificação
+
+                if (await _eventoService.DeleteEvento(id)) 
+                {
+                    services.DeleteImage(evento.ImagemURL, _hostEnvironment);
+                    return Ok(new { message = "Deletado" });
+                }
+                else 
+                {
+                    throw new Exception("Ocorreu um erro específico ao tentar deletar o evento.");
+                }
             }
             catch (Exception e)
             {

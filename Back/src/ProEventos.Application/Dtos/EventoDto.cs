@@ -31,7 +31,7 @@ namespace ProEvento.Application.Dtos
         Range(10,120000, ErrorMessage ="A quantidade de pessoas deverá ter entre 10 e 120.000 pessoas")]
         public int QuantidadePessoas { get; set; }
         
-        [Required(ErrorMessage ="O campo {0} é obrigatório"),
+        [
         RegularExpression(@".*\.(gif|jpe?g|bmp|png)$", ErrorMessage ="Não é uma imagem com o formato válido. Formatos aceitos: gif, jpeg, bmp ou png")    
         ]
         public string ImagemURL { get; set; }
@@ -43,7 +43,6 @@ namespace ProEvento.Application.Dtos
         [Display(Name ="e-mail"),
         EmailAddress(ErrorMessage = "O endereço de email não é válido"),
         MinLength(4, ErrorMessage = "O campo {0} necessida de no mínimo 4 caracteres"),
-        MaxLength(30, ErrorMessage = "O campo {0} suporta no máximo 30 caracteres! Favor ajustar"),
         Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Email { get; set; }
 
