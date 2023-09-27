@@ -107,7 +107,6 @@ namespace ProEvento.API.Controllers
                 if (evento == null)
                 {
                     return NoContent();
-                    logger.Log("AttEvent", $"Erro ao atualizar o evento: {evento.Id}", "Error");
                 }
                     return Ok(evento);
             }

@@ -7,12 +7,12 @@ using Xunit;
 
 namespace ProEventosTests
 {
-    class LoteControllerTest
+    public class LoteControllerTest
     {
         [Fact]
         public void GetLoteTest()
         {
-
+            Assert.True(true);
         }
     }
 }

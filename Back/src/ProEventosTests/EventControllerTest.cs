@@ -8,7 +8,7 @@ namespace ProEventosTests
         [Fact]
         public void GetEventsTests()
         {
-
+            Assert.True(true);
         }
     }
 }

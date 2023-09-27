@@ -52,7 +52,6 @@ namespace ProEvento.API.Controllers
                 if (lote == null)
                 {
                     return NoContent();
-                    logger.Log("SaveLotes", $"Erro ao atualizar o lote do evento: {eventoId} | lote não existe", "Error");
                 }
                     return Ok(lote);
             }
