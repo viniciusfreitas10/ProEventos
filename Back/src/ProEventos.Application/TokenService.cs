@@ -33,24 +33,26 @@ namespace ProEventos.Application
         }
         public async Task<string> CreateToken(UserUpdateDto userUpdateDto)
         {
-            var user = _mapper.Map<User>(userUpdateDto); //Talvez der ruim pq pode ser o User do indentity
+            var user = _mapper.Map<User>(userUpdateDto);
 
-            var claims = new List<Claim>()
-            {
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName?.ToString())
-            };
+            var claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                    new Claim(ClaimTypes.Name, user.UserName?.ToString())
+                };
 
             var roles = await _userManager.GetRolesAsync(user);
-
             claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
             var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);
 
-            var tokenDescription = new SecurityTokenDescriptor()
+            var now = DateTime.UtcNow; // Use UTC time to avoid timezone issues
+
+            var tokenDescription = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddMinutes(60),
+                Expires = now.AddMinutes(60),
+                NotBefore = now,
                 SigningCredentials = creds
             };
 

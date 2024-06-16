@@ -64,9 +64,40 @@ namespace ProEvento.API.Controllers.Seguranca
             }
             catch (Exception e)
             {
-                Logger.Log("GetUser", $"User: {userDto.UserName} - {e.Message}", "Error");
+                Logger.Log("Register", $"User: {userDto.UserName} - {e.Message}", "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar registrar um Usuário. Erro: {e.Message}");
+            }
+        }
+
+        [HttpPost("Login")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Login(UserLoginDto userLogin)
+        {
+            try
+            {
+                var user = await _accountService.GetUserByUserNameAsync(userLogin.UserName);
+
+                if (user == null)
+                    return Unauthorized("Usuário ou senha inválida");
+
+                var result = await _accountService.CheckUserPasswordAsync(user, userLogin.Password);
+
+                if (!result.Succeeded)
+                    return Unauthorized();
+
+                return Ok(new
+                {
+                    userName = user.UserName,
+                    primeiroNome = user.PrimeiroNome,
+                    token = _tokenService.CreateToken(user).Result
+                });
+            }
+            catch (Exception e)
+            {
+                Logger.Log("GetUser", $"User: {userLogin.UserName} - {e.Message}", "Error");
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Erro ao tentar recuperar Usuário. Erro: {e.Message}");
             }
         }
     } 
