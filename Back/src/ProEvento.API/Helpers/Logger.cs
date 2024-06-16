@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ProEvento.API.Controllers
+namespace ProEvento.API.Helpers
 {
-    public class Logger
+    public static class Logger
     {
-        public string _file { get; set; }
-        public string _mensageInfo { get; set; }
+        public static string _file { get; set; }
+        public static string _mensageInfo { get; set; }
 
-        public Logger()
-        {}
-        public void Log(string metodo, string mensagem, string type)
+
+        public static void Log(string metodo, string mensagem, string type)
         {
             StreamWriter file = CreatStramWriter(type);
 
@@ -22,7 +21,7 @@ namespace ProEvento.API.Controllers
             file.WriteLine("-------------------------------");
             file.Dispose();
         }
-        public StreamWriter CreatStramWriter(string type)
+        public static StreamWriter CreatStramWriter(string type)
         {
             string FileLog = CreatFileTxt(type);
 
@@ -32,23 +31,23 @@ namespace ProEvento.API.Controllers
 
             return file;
         }
-        public string CreatFileTxt(string type)
+        public static string CreatFileTxt(string type)
         {
             _file = @"C:\Users\vfreitas\source\repos\PROEVENTOS\Back\src\ProEvento.API\Log\" + $"log_{type}_" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
-            
+
             return _file;
         }
-        public bool VerifyExistsFile(string file)
+        public static bool VerifyExistsFile(string file)
         {
-           return Directory.Exists(Path.GetDirectoryName(file)) ? true : false;
+            return Directory.Exists(Path.GetDirectoryName(file)) ? true : false;
         }
-        public void CreatVerifyFile(bool exists, string file)
+        public static void CreatVerifyFile(bool exists, string file)
         {
             if (!exists)
                 Directory.CreateDirectory(Path.GetDirectoryName(file));
         }
-       
 
-       
+
+
     }
 }

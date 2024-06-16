@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace ProEventos.Persistence
 {
-    class UserPersist : GeralPersist, IUserPersist
+    public class UserPersist : GeralPersist, IUserPersist
     {
         private readonly ProEventosContext _context;
         public UserPersist(ProEventosContext context) : base(context)

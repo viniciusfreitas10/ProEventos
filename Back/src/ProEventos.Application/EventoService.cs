@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using ProEventos.Persistence.Contratos;
 using ProEvento.Application.Dtos;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace ProEventos.Application
 {
@@ -38,9 +39,17 @@ namespace ProEventos.Application
                 }
                 return null;
             }
-            catch (Exception e )
+            catch (DbUpdateException ex)
             {
-                throw new Exception(e.Message);
+                // Verifica se a exceção interna está presente e captura a mensagem dela
+                var innerExceptionMessage = ex.InnerException != null ? ex.InnerException.Message : "Detalhes adicionais não disponíveis.";
+
+                // Lança uma nova exceção com uma mensagem mais informativa, incluindo os detalhes da exceção interna
+                throw new Exception($"Erro ao adicionar o evento: {innerExceptionMessage}");
+            }
+            catch(Exception ex)
+            {
+                throw new Exception($"Erro ao adicionar o evento: {ex.Message}");
             }
         }
         public async Task<EventoDto> UpdateEvento(int eventoId, EventoDto model)
