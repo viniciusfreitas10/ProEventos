@@ -26,7 +26,6 @@ namespace ProEvento.API.Controllers.Seguranca
         }
 
         [HttpGet("GetUser/{userName}")]
-        [AllowAnonymous]
         public async Task<IActionResult> GetUser(string userName)
         {
             try
