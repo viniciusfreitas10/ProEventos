@@ -45,7 +45,8 @@ namespace ProEvento.Application.Dtos
         MinLength(4, ErrorMessage = "O campo {0} necessida de no mínimo 4 caracteres"),
         Required(ErrorMessage = "O campo {0} é obrigatório")]
         public string Email { get; set; }
-
+        public int UserId { get; set; }
+        public UserDto userDto { get; set; }
         //exemplo para campo que não será utilizado no banco de dados, só está aqui para regra de negócio
         /*[NotMapped]
         public int ContagemDias{ get; set; }

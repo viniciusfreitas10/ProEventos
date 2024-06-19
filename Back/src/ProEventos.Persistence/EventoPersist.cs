@@ -22,7 +22,7 @@ namespace ProEventos.Persistence
             _context.ChangeTracker.QueryTrackingBehavior = QueryTrackingBehavior.NoTracking;
         }
 
-        public async Task<Evento[]> GetAllEventosAsync(bool IncluidPalestrantes = false)
+        public async Task<Evento[]> GetAllEventosAsync(int userId, bool IncluidPalestrantes = false)
         {
             IQueryable<Evento> query = _context.Eventos
                 .Include(e => e.Lotes)
@@ -34,12 +34,13 @@ namespace ProEventos.Persistence
                     .ThenInclude(pe => pe.palestrante);
             }
 
-            query = query.OrderBy(e => e.Id);
+            query = query.Where(e => e.UserId == userId)
+                         .OrderBy(e => e.Id);
 
             return await query.ToArrayAsync();
         }
 
-        public async Task<Evento[]> GetAllEventosByTemaAsync(string tema, bool IncluidPalestrantes = false)
+        public async Task<Evento[]> GetAllEventosByTemaAsync(int userId, string tema, bool IncluidPalestrantes = false)
         {
             try
             {
@@ -53,8 +54,8 @@ namespace ProEventos.Persistence
                         .ThenInclude(pe => pe.palestrante);
                 }
 
-                query = query.Where(e => e.Tema.ToLower().Contains(tema.ToLower()))
-                    .OrderBy(e => e.Id);
+                query = query.Where(e => e.Tema.ToLower().Contains(tema.ToLower())
+                                        && e.UserId == userId).OrderBy(e => e.Id);
 
                 return await query.ToArrayAsync();
 
@@ -65,7 +66,7 @@ namespace ProEventos.Persistence
             
         }
        
-        public async Task<Evento> GetEventoById(int eventoId, bool IncluidPalestrantes = false)
+        public async Task<Evento> GetEventoById(int userId, int eventoId, bool IncluidPalestrantes = false)
         {
             try
             {
@@ -78,7 +79,7 @@ namespace ProEventos.Persistence
                     query = query.Include(e => e.PalestrantesEventos).ThenInclude(pe => pe.palestrante);
                 }
 
-                query = query.Where(e => e.Id == eventoId)
+                query = query.Where(e => e.Id == eventoId && e.UserId == userId)
                     .AsNoTracking().OrderBy(e => e.Id);
 
                 return await query.FirstOrDefaultAsync();

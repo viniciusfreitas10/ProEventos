@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 using ProEventos.Application.Contratos;
 using ProEvento.API.Helpers;
 using ProEventos.Application.Dtos;
+using System.Security.Claims;
+using ProEvento.API.Extensions;
 
 namespace ProEvento.API.Controllers.Seguranca
 {
@@ -25,12 +27,14 @@ namespace ProEvento.API.Controllers.Seguranca
             _tokenService = tokenService;
         }
 
-        [HttpGet("GetUser/{userName}")]
-        public async Task<IActionResult> GetUser(string userName)
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser()
         {
             try
             {
-                var user = await _accountService.GetUserByUserNameAsync(userName);
+                var userName = User.GetUserName();
+
+                var user = await _accountService.GetUserByUserNameAsync(userName.ToString());
 
                 if(user == null) 
                     return NoContent();
@@ -39,7 +43,7 @@ namespace ProEvento.API.Controllers.Seguranca
             }
             catch (Exception e)
             {
-                Logger.Log("GetUser", $"User: {userName} - {e.Message}", "Error");
+                Logger.Log("GetUser", $"User:  - {e.Message}", "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
                     $"Erro ao tentar recuperar Usuário. Erro: {e.Message}");
             }
@@ -96,7 +100,31 @@ namespace ProEvento.API.Controllers.Seguranca
             {
                 Logger.Log("GetUser", $"User: {userLogin.UserName} - {e.Message}", "Error");
                 return this.StatusCode(StatusCodes.Status500InternalServerError,
-                    $"Erro ao tentar recuperar Usuário. Erro: {e.Message}");
+                    $"Erro ao tentar fazer login do Usuário. Erro: {e.Message}");
+            }
+        }
+
+        [HttpPut("UpdateUser")]
+        public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdateDto)
+        {
+            try
+            {
+                var user = await _accountService.GetUserByUserNameAsync(User.GetUserName()); 
+
+                if (user == null)
+                    return Unauthorized("Usuário ou senha inválida");
+
+
+                var userReturn = await _accountService.UpdateAccount(userUpdateDto);
+                if(userReturn == null) return NoContent();
+
+                return Ok(userReturn);
+            }
+            catch (Exception e)
+            {
+                Logger.Log("UpdateUser", $"User: {userUpdateDto.UserName} - {e.Message}", "Error");
+                return this.StatusCode(StatusCodes.Status500InternalServerError,
+                    $"Erro ao tentar atualizar um Usuário. Erro: {e.Message}");
             }
         }
     } 

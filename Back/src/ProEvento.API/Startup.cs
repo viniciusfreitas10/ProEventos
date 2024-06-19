@@ -100,10 +100,38 @@ namespace ProEvento.API
 
 
             services.AddCors();
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEvento.API", Version = "v1" });
-                c.ResolveConflictingActions(x => x.First());
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "ProEvento.API", Version = "v1" });
+                options.ResolveConflictingActions(x => x.First());
+                options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Description = @"JWT Authorization header usando Bearer.
+                                  Entre como 'Barer ' [espaço] então coloque seu token.
+                                  Exemplo: 'Bearer 2133243438rfds'",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme()
+                        {
+                            Reference = new OpenApiReference()
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Scheme = "ouath2",
+                            Name = "Bearer",
+                            In = ParameterLocation.Header
+                        },
+                        new List<string>()
+                    }
+                });
             });
         }
 
