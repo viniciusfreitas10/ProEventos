@@ -10,6 +10,7 @@ using ProEvento.API.Helpers;
 using ProEventos.Application.Dtos;
 using System.Security.Claims;
 using ProEvento.API.Extensions;
+using ProEventos.Domain.Identity;
 
 namespace ProEvento.API.Controllers.Seguranca
 {
@@ -60,6 +61,7 @@ namespace ProEvento.API.Controllers.Seguranca
 
                 var User = await _accountService.CreateAccountAsync(userDto);
 
+                //User.token = _tokenService.CreateToken(User).Result; //ToDo: Corrigir
                 if (User != null)
                     return Ok(User);
 

@@ -30,7 +30,8 @@ export class LoginComponent implements OnInit {
         if(error.status == 401){
           this.toaster.error("usuário ou senha inválidos")
         }else{
-          console.log("Erro: " + error);
+          this.toaster.error("Erro ao fazer login! Entre em contato com o administrador do sistema.")
+          console.log("Erro login: " + error.message);
         }
       }
     )

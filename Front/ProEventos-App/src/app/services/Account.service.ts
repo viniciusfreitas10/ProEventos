@@ -40,4 +40,16 @@ export class AccountService {
     localStorage.setItem('user', JSON.stringify(User));
     this.currentUserSource.next(User);
   }
+
+  public Register(user: any): Observable<void>{
+    return this.http.post<User>(this.baseUrl + 'Register', user).pipe(
+      take(1),
+      map((response: User) =>{
+        const user = response;
+        if(user){
+          this.setCurrentUser(user);
+        }
+      })
+    )
+  }
 }
