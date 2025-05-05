@@ -31,9 +31,10 @@ namespace ProEventos.Application
             _mapper = mapper;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["TokenKey"]));
         }
-        public async Task<string> CreateToken(UserUpdateDto userUpdateDto)
+
+        public async Task<string> CreateToken<T>(T userDto)
         {
-            var user = _mapper.Map<User>(userUpdateDto);
+            var user = _mapper.Map<User>(userDto);
 
             var claims = new List<Claim>
                 {

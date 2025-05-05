@@ -30,7 +30,6 @@ export class AccountService {
   }
 
   public logout(): void{
-    console.log("entrei logout account")
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
     this.currentUserSource.complete();

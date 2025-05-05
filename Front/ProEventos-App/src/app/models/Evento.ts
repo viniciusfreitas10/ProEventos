@@ -1,3 +1,4 @@
+import { User } from "./Identity/User";
 import { Lote } from "./Lote";
 import { Palestrante } from "./Palestrante";
 import { RedeSocial } from "./RedeSocial";
@@ -14,4 +15,5 @@ export interface Evento {
   lotes: Lote[];
   redeSociai: RedeSocial[];
   palestrantesEventos: Palestrante[];
+  userDto: User;
 }

@@ -9,14 +9,16 @@ import { environment } from 'src/environments/environment';
 
 export class EventoService {
   token = new HttpHeaders({
-    'Authorization' : 'Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJuYW1laWQiOiIzIiwidW5pcXVlX25hbWUiOiJ2aW5pIiwibmJmIjoxNzE4NzU1ODczLCJleHAiOjE3MTg3NTk0NzMsImlhdCI6MTcxODc1NTg3M30.N74z9lrSDZp3NZZ-qBlJe9UTvGZMNvn9HytCklbljlUKKohLtOGy2HuM3YMu7EQt--0uc6cfOLhRS-Jx3ZFTpw'
+    'Authorization' : `Bearer ${JSON.parse(localStorage.getItem('user')).token}`
   });
+
   baseURL = environment.apiURL + 'api/Evento/';
   constructor(private http: HttpClient) {
-    //Headers.apply.arguments = "bearer 83489fj4389fj3894fj98fj894fj9"
+
   }
 
   public getEventos(): Observable<Evento[]>{
+    console.log("token : " + JSON.parse(localStorage.getItem('user')).token)
     return this.http.get<Evento[]>(this.baseURL, { headers: this.token})
     .pipe(take(1));
   }
@@ -32,6 +34,7 @@ export class EventoService {
   }
 
   public post(evento: Evento): Observable<Evento>{
+    console.log("token : " + JSON.parse(localStorage.getItem('user')).token)
     return this.http
     .post<Evento>(this.baseURL, evento, { headers: this.token})
     .pipe(take(1));

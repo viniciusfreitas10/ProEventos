@@ -61,10 +61,18 @@ namespace ProEvento.API.Controllers.Seguranca
 
                 var User = await _accountService.CreateAccountAsync(userDto);
 
-                //User.token = _tokenService.CreateToken(User).Result; //ToDo: Corrigir
-                if (User != null)
-                    return Ok(User);
+                User.token = _tokenService.CreateToken(User).Result;
 
+                if (User != null)
+                {
+                    return Ok(new
+                    {
+                        userName = User.UserName,
+                        primeiroNome = User.PrimeiroNome,
+                        token = _tokenService.CreateToken(User).Result
+                    });
+                }
+                
                 return BadRequest("User was not created. Try again");
             }
             catch (Exception e)

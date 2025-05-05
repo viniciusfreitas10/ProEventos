@@ -2,12 +2,12 @@ import { Template } from '@angular/compiler/src/render3/r3_ast';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-//import { error } from 'console';
 import { BsLocaleService } from 'ngx-bootstrap/datepicker';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { NgxSpinnerService, Spinner } from 'ngx-spinner';
 import { Toast, ToastrService } from 'ngx-toastr';
 import { Evento } from 'src/app/models/Evento';
+import { User } from 'src/app/models/Identity/User';
 import { Lote } from 'src/app/models/Lote';
 import { EventoService } from 'src/app/services/Evento.service';
 import { LoteService } from 'src/app/services/Lote.service';
@@ -24,6 +24,7 @@ export class EventoDetalheComponent implements OnInit {
     eventoId: number;
     form!: FormGroup;
     evento = {} as Evento;
+    user = {} as User;
     ModeSave?: string = 'post';
     loteAtual = {id: 0, nome: "", indice: 0};
     imagemURL = `/assets/upload.png`;
@@ -80,8 +81,17 @@ export class EventoDetalheComponent implements OnInit {
     ngOnInit(): void {
       this.validation();
       this.CarregarEvento();
+      this.CarregaUser();
     }
 
+    public CarregaUser(): void{
+      var userJson = localStorage.getItem('user');
+      if(userJson){
+        this.user = JSON.parse(userJson) as User;
+      }else{
+        console.log("User not found in this localStorage");
+      }
+    }
     public CarregarEvento(): void{
       this.eventoId = +this.activatedRouter.snapshot.paramMap.get('id');
 
@@ -164,7 +174,9 @@ export class EventoDetalheComponent implements OnInit {
     this.spiner.show();
     if(this.form.valid){
       this.evento = (this.ModeSave == 'post') ? {...this.form.value} : {id: this.evento.id, ...this.form.value};
-
+      console.log(this.user);
+      console.log(this.evento);
+      this.evento.userDto = this.user;
       this.eventoService[this.ModeSave](this.evento).subscribe(
         (eventoRetorno: Evento) => {
           this.toastr.success("Evento atualizado com sucesso!", "Sucesso!");

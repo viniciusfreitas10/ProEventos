@@ -9,6 +9,6 @@ namespace ProEventos.Application.Contratos
 {
     public interface ITokenService
     {
-        Task<string> CreateToken(UserUpdateDto userUpdateDto);
+        Task<string> CreateToken<T>(T userUpdateDto);
     }
 }
